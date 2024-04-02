@@ -110,6 +110,9 @@ void drawTank() {
 
 void display_func(void)
 {
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT); 
+	
 	int randomNumX = rand() % (maxRange - minRange + 1) + minRange;
 	int randomNumY = rand() % (maxRange - minRange + 1) + minRange;
 

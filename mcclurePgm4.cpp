@@ -14,6 +14,28 @@ using namespace std;
 int xpos = 0;
 int ypos = 0;
 
+int minRange = -100;
+int maxRange = 100; 
+
+int turn = 0;
+
+bool spawnFood = false; 
+
+void fanRotation(int val) {
+	if(turn == 360) {
+		turn = 0;
+	}
+	turn += 10;
+
+	glutTimerFunc(100, fanRotation, 0);
+
+	glutPostRedisplay();
+}
+
+void collisionDetection() {
+
+}
+
 void keyboardInput(unsigned char key, int x, int y) {
 	if (key == 'H') {
 		xpos -= 10;
@@ -36,17 +58,20 @@ void drawFan() {
 	glLoadIdentity();
 	glBegin(GL_TRIANGLES);
 
-	// Top fan blade 
-	glVertex3f(0.0, 0.0, -250.0);
-	glVertex3f(50.0, 0.0, -250.0);
-	glVertex3f(25.0, 50.0, -250.0);
-
-	glVertex3f(0.0, 0.0, -250.0);
-	glVertex3f(-50.0, 0.0, -250.0);
-	glVertex3f(-25.0, 50.0, -250.0);
-
-	
+	// Draw one fan 
+	glVertex3f(0.0, 0.0, -300.0);
+	glVertex3f(35.0, 50.0, -300.0);
+	glVertex3f(17.5, 50.0, -300.0);
 	glEnd(); 
+
+	for(int i = 1; i <= 6; i++) {
+		glRotatef(60.0 + turn, 0.0, 0.0, 1.0);
+		glBegin(GL_TRIANGLES);
+		glVertex3f(0.0, 0.0, -300.0);
+		glVertex3f(35.0, 50.0, -300.0);
+		glVertex3f(17.5, 50.0, -300.0);
+		glEnd();
+	} 
 }
 
 
@@ -55,13 +80,13 @@ void drawFish(float xpos, float ypos) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(xpos, ypos, 0.0); 
-	glScalef(75.0, 30.0, 25.0);
+	glScalef(37.5, 15.0, 12.5);
 	glutWireOctahedron();
 	glLoadIdentity();
 	glBegin(GL_TRIANGLES);
-	glVertex3f(xpos - 75, ypos, 0.0);
-	glVertex3f(xpos - 100, ypos - 25, 0.0);
-	glVertex3f(xpos - 100, ypos + 25, 0.0);
+	glVertex3f(xpos - 37.5, ypos, 0.0);
+	glVertex3f(xpos - 52.5, ypos - 10, 0.0);
+	glVertex3f(xpos - 52.5, ypos + 10, 0.0);
 	glEnd();
 }
 
@@ -70,7 +95,7 @@ void drawFood(float xpos, float ypos) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(xpos, ypos, 0.0);
-	glutSolidSphere(10, 30, 30);
+	glutSolidSphere(5, 30, 30);
 	glLoadIdentity();
 }
 
@@ -78,23 +103,30 @@ void drawTank() {
 	glColor3f(1.0, 1.0, 0.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0, 0, -50.0);
+	glTranslatef(0, 0, -175.0);
 	glutWireCube(250);
 	glLoadIdentity();
 }
 
 void display_func(void)
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0, 640.0 / 640.0, 400.0, 2000.0);
-	gluLookAt(175, 320, 500, 0, 0, 0, 0, 1, 0); 
+	int randomNumX = rand() % (maxRange - minRange + 1) + minRange;
+	int randomNumY = rand() % (maxRange - minRange + 1) + minRange;
+
+	cout << randomNumX << " " << randomNumY << endl;
+
 	drawFan();
 	drawFish(xpos, ypos); 
-	//drawFood(100, 100);
+
+	if (spawnFood == true) {
+		drawFood(randomNumX, randomNumY);
+	}
+
 	drawTank();
-    glFlush();
+    //glutSwapBuffers();
+	glFlush();
 }
+
 
 // Set the canvas size to be 640 x 640
 #define canvas_Width 640
@@ -113,7 +145,8 @@ int main(int argc, char ** argv) {
 	// Start the keyboard and display event handlers along with the main loop
 	glutDisplayFunc(display_func);
 	glutKeyboardFunc(keyboardInput);
-	gluLookAt(175, 320, 500, 0, 0, 0, 0, 1, 0);
+	glutIdleFunc(collisionDetection);
+	glutTimerFunc(100, fanRotation, 0);
 	glutMainLoop();
 	return 0;
 }

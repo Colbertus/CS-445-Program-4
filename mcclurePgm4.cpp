@@ -266,40 +266,43 @@ void collisionDetection() {
 // This is my keyboard input handler for the program
 void keyboardInput(unsigned char key, int x, int y) {
 
-	// If the key pressed is 'H', move the fish 'left' by 10 units
-	if (key == 'H') {
+	if(gameOver == false) {
 
-		// Check if the fish is within the bounds of the tank
-		if(xpos > -100) {
-			xpos -= 10;
-			glutPostRedisplay();
+		// If the key pressed is 'H', move the fish 'left' by 10 units
+		if (key == 'H') {
+
+			// Check if the fish is within the bounds of the tank
+			if(xpos > -100) {
+				xpos -= 10;
+				glutPostRedisplay();
 		}
 	
-	// If the key pressed is 'J', move the fish 'right' by 10 units
-	} else if (key == 'J') {
+		// If the key pressed is 'J', move the fish 'right' by 10 units
+		} else if (key == 'J') {
 
-		// Check if the fish is within the bounds of the tank
-		if(xpos < 100) {
-			xpos += 10;
-			glutPostRedisplay();
-		}
+			// Check if the fish is within the bounds of the tank
+			if(xpos < 100) {
+				xpos += 10;
+				glutPostRedisplay();
+			}
 	
-	// If the key pressed is 'U', move the fish 'up' by 10 units
-	} else if (key == 'U') {
+		// If the key pressed is 'U', move the fish 'up' by 10 units
+		} else if (key == 'U') {
 
-		// Check if the fish is within the bounds of the tank
-		if(ypos < 100) {
-			ypos += 10;
-			glutPostRedisplay();
-		}
+			// Check if the fish is within the bounds of the tank
+			if(ypos < 100) {
+				ypos += 10;
+				glutPostRedisplay();
+			}
 	
-	// If the key pressed is 'N', move the fish 'down' by 10 units
-	} else if (key == 'N') {
+		// If the key pressed is 'N', move the fish 'down' by 10 units
+		} else if (key == 'N') {
 
-		// Check if the fish is within the bounds of the tank
-		if(ypos > -100) {
-			ypos -= 10;
-			glutPostRedisplay();
+			// Check if the fish is within the bounds of the tank
+			if(ypos > -100) {
+				ypos -= 10;
+				glutPostRedisplay();
+			}
 		}
 	}
 }
